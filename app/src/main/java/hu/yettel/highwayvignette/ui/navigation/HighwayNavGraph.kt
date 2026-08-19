@@ -1,6 +1,5 @@
 package hu.yettel.highwayvignette.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,9 +8,11 @@ import androidx.navigation.compose.rememberNavController
 import hu.yettel.highwayvignette.domain.model.VignetteOption
 import hu.yettel.highwayvignette.ui.ConfirmScreen
 import hu.yettel.highwayvignette.ui.HomeScreen
+import hu.yettel.highwayvignette.ui.SuccessScreen
 
 object Routes {
     const val HOME = "home"
+    const val SUCCESS = "success"
     const val CONFIRM_NATIONAL = "confirm_national/{optionId}/{cost}/{trxFee}/{sum}"
 
     fun confirmNational(optionId: String, cost: Double, trxFee: Double, sum: Double) =
@@ -44,11 +45,15 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
                 trxFee = args.getFloat("trxFee").toDouble(),
                 sum = args.getFloat("sum").toDouble()
             )
-            ConfirmScreen(option = option, onOrderSuccess = { navController.navigate("success") })
+            ConfirmScreen(option = option, onOrderSuccess = { navController.navigate(Routes.SUCCESS) })
         }
 
-        composable("success") {
-            Text("Success! (placeholder)")
+        composable(Routes.SUCCESS) {
+            SuccessScreen(
+                onDone = {
+                    navController.popBackStack(Routes.HOME, inclusive = false)
+                }
+            )
         }
     }
 }
