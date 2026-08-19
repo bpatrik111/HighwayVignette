@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.yettel.highwayvignette.data.repository.HighwayRepository
 import hu.yettel.highwayvignette.domain.model.Vehicle
+import hu.yettel.highwayvignette.domain.model.VignetteOption
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,9 +25,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val vehicle = repository.getVehicle()
-                _uiState.update { it.copy(isLoading = false, vehicle = vehicle) }
+                val options = repository.getNationalVignetteOptions()
+                _uiState.update { it.copy(isLoading = false, vehicle = vehicle, nationalOptions = options) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = "Failed to load vehicle data.") }
+                _uiState.update { it.copy(isLoading = false, error = "Failed to load data.") }
             }
         }
     }
@@ -35,5 +37,6 @@ class HomeViewModel @Inject constructor(
 data class HomeUiState(
     val isLoading: Boolean = true,
     val vehicle: Vehicle? = null,
+    val nationalOptions: List<VignetteOption> = emptyList(),
     val error: String? = null
 )

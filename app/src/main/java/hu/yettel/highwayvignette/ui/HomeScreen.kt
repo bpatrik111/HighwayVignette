@@ -1,7 +1,9 @@
 package hu.yettel.highwayvignette.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -20,7 +22,14 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         when {
             state.isLoading -> CircularProgressIndicator()
             state.error != null -> Text(state.error ?: "")
-            state.vehicle != null -> Text("Plate: ${state.vehicle?.plate}, Owner: ${state.vehicle?.ownerName}")
+            state.vehicle != null -> {
+                Text("Plate: ${state.vehicle?.plate}, Owner: ${state.vehicle?.ownerName}")
+                Spacer(Modifier.height(16.dp))
+                Text("National vignette options:")
+                state.nationalOptions.forEach { option ->
+                    Text("${option.id}: ${option.sum} HUF")
+                }
+            }
         }
     }
 }
