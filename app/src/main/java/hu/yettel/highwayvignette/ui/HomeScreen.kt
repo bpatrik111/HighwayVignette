@@ -16,11 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.yettel.highwayvignette.domain.model.VignetteOption
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onPurchaseClick: () -> Unit
+    onPurchaseClick: (VignetteOption) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -43,7 +44,11 @@ fun HomeScreen(
                     )
                 }
                 Spacer(Modifier.height(16.dp))
-                Button(onClick = onPurchaseClick, enabled = state.selectedOptionId != null) {
+                val selectedOption = state.nationalOptions.firstOrNull { it.id == state.selectedOptionId }
+                Button(
+                    onClick = { selectedOption?.let(onPurchaseClick) },
+                    enabled = selectedOption != null
+                ) {
                     Text("Purchase")
                 }
             }
