@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onPurchaseClick: () -> Unit
+) {
     val state by viewModel.uiState.collectAsState()
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -37,6 +41,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             .clickable { viewModel.selectOption(option.id) }
                             .padding(vertical = 8.dp)
                     )
+                }
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = onPurchaseClick, enabled = state.selectedOptionId != null) {
+                    Text("Purchase")
                 }
             }
         }
