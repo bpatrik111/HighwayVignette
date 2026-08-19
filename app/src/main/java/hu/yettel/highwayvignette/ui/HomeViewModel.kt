@@ -26,11 +26,22 @@ class HomeViewModel @Inject constructor(
             try {
                 val vehicle = repository.getVehicle()
                 val options = repository.getNationalVignetteOptions()
-                _uiState.update { it.copy(isLoading = false, vehicle = vehicle, nationalOptions = options) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        vehicle = vehicle,
+                        nationalOptions = options,
+                        selectedOptionId = options.firstOrNull()?.id
+                    )
+                }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = "Failed to load data.") }
             }
         }
+    }
+
+    fun selectOption(optionId: String) {
+        _uiState.update { it.copy(selectedOptionId = optionId) }
     }
 }
 
@@ -38,5 +49,6 @@ data class HomeUiState(
     val isLoading: Boolean = true,
     val vehicle: Vehicle? = null,
     val nationalOptions: List<VignetteOption> = emptyList(),
+    val selectedOptionId: String? = null,
     val error: String? = null
 )

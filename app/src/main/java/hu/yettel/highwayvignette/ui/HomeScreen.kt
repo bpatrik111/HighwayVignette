@@ -1,8 +1,10 @@
 package hu.yettel.highwayvignette.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,7 +29,14 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 Spacer(Modifier.height(16.dp))
                 Text("National vignette options:")
                 state.nationalOptions.forEach { option ->
-                    Text("${option.id}: ${option.sum} HUF")
+                    val isSelected = option.id == state.selectedOptionId
+                    Text(
+                        text = "${if (isSelected) "> " else "  "}${option.id}: ${option.sum} HUF",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { viewModel.selectOption(option.id) }
+                            .padding(vertical = 8.dp)
+                    )
                 }
             }
         }
