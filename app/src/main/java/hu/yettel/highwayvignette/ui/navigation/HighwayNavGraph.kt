@@ -1,12 +1,11 @@
 package hu.yettel.highwayvignette.ui.navigation
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import hu.yettel.highwayvignette.domain.model.VignetteOption
 import hu.yettel.highwayvignette.ui.ConfirmScreen
 import hu.yettel.highwayvignette.ui.HomeScreen
@@ -35,12 +34,7 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
 
         composable(
             route = Routes.CONFIRM_NATIONAL,
-            arguments = listOf(
-                navArgument("optionId") { type = NavType.StringType },
-                navArgument("cost") { type = NavType.FloatType },
-                navArgument("trxFee") { type = NavType.FloatType },
-                navArgument("sum") { type = NavType.FloatType }
-            )
+            arguments = listOf()
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val option = VignetteOption(
@@ -50,7 +44,11 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
                 trxFee = args.getFloat("trxFee").toDouble(),
                 sum = args.getFloat("sum").toDouble()
             )
-            ConfirmScreen(option = option)
+            ConfirmScreen(option = option, onOrderSuccess = { navController.navigate("success") })
+        }
+
+        composable("success") {
+            Text("Success! (placeholder)")
         }
     }
 }

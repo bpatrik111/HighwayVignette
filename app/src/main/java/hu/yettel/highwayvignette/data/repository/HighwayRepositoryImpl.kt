@@ -1,8 +1,12 @@
 package hu.yettel.highwayvignette.data.repository
 
 import hu.yettel.highwayvignette.data.remote.HighwayApi
+import hu.yettel.highwayvignette.data.remote.dto.HighwayOrderRequestDto
 import hu.yettel.highwayvignette.data.remote.mapper.toDomain
 import hu.yettel.highwayvignette.data.remote.mapper.toDomainOptions
+import hu.yettel.highwayvignette.data.remote.mapper.toDto
+import hu.yettel.highwayvignette.domain.model.OrderLineItem
+import hu.yettel.highwayvignette.domain.model.OrderResult
 import hu.yettel.highwayvignette.domain.model.Vehicle
 import hu.yettel.highwayvignette.domain.model.VignetteOption
 import javax.inject.Inject
@@ -20,6 +24,23 @@ class HighwayRepositoryImpl @Inject constructor(
         return vignettes
             .filter { entry -> entry.vignetteType.any { it in NATIONAL_CODES } }
             .flatMap { it.toDomainOptions() }
+    }
+
+    override suspend fun placeOrder(items: List<OrderLineItem>): OrderResult {
+        val request = HighwayOrderRequestDto(highwayOrders = items.map { it.toDto() })
+        return try {
+            val response = api.postOrder(request)
+            if (response.statusCode == "OK") {
+                OrderResult.Success(
+                    requestId = response.requestId,
+                    receivedOrders = response.receivedOrders.orEmpty().map { it.toDomain() }
+                )
+            } else {
+                OrderResult.Failure(response.message ?: "Unknown error.")
+            }
+        } catch (e: Exception) {
+            OrderResult.Failure("Could not reach the server.")
+        }
     }
 
     companion object {
