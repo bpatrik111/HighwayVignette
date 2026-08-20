@@ -5,6 +5,7 @@ import hu.yettel.highwayvignette.data.remote.dto.HighwayOrderRequestDto
 import hu.yettel.highwayvignette.data.remote.mapper.toDomain
 import hu.yettel.highwayvignette.data.remote.mapper.toDomainOptions
 import hu.yettel.highwayvignette.data.remote.mapper.toDto
+import hu.yettel.highwayvignette.domain.model.County
 import hu.yettel.highwayvignette.domain.model.OrderLineItem
 import hu.yettel.highwayvignette.domain.model.OrderResult
 import hu.yettel.highwayvignette.domain.model.Vehicle
@@ -41,6 +42,16 @@ class HighwayRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             OrderResult.Failure("Could not reach the server.")
         }
+    }
+
+    override suspend fun getCounties(): List<County> =
+        api.getHighwayInfo().payload.counties.map { it.toDomain() }
+
+    override suspend fun getCountyVignettePrice(): VignetteOption {
+        val payload = api.getHighwayInfo().payload
+        val countyIds = payload.counties.map { it.id }.toSet()
+        val entry = payload.highwayVignettes.first { it.vignetteType.any { code -> code in countyIds } }
+        return entry.toDomainOptions().first()
     }
 
     companion object {

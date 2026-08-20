@@ -21,7 +21,8 @@ import hu.yettel.highwayvignette.domain.model.VignetteOption
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onPurchaseClick: (VignetteOption) -> Unit
+    onPurchaseClick: (VignetteOption) -> Unit,
+    onCountySelectionClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -51,6 +52,14 @@ fun HomeScreen(
                 ) {
                     Text("Purchase")
                 }
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = "County vignettes",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onCountySelectionClick() }
+                        .padding(vertical = 8.dp)
+                )
             }
         }
     }
