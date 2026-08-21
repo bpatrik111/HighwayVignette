@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hu.yettel.highwayvignette.R
+import hu.yettel.highwayvignette.domain.model.County
 import hu.yettel.highwayvignette.ui.common.ConfirmRow
 import hu.yettel.highwayvignette.ui.common.HighwayVignetteTopBar
 import hu.yettel.highwayvignette.ui.common.formatHuf
@@ -63,16 +66,21 @@ fun CountyConfirmScreen(
                 CircularProgressIndicator()
             } else {
                 ConfirmRow(stringResource(R.string.registration_number), state.plate)
-                ConfirmRow(stringResource(R.string.vignette_type),
-                    stringResource(R.string.annual_counties)
-                )
+                ConfirmRow(stringResource(R.string.vignette_type), stringResource(R.string.annual_counties))
 
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
-                state.selectedCounties.forEach { county ->
-                    ConfirmRow(county.name, formatHuf(state.unitPrice?.cost ?: 0.0))
+                LazyColumn(Modifier.weight(1f, fill = false)) {
+                    items(state.selectedCounties, key = County::id) { county ->
+                        ConfirmRow(county.name, formatHuf(state.unitPrice?.cost ?: 0.0))
+                    }
+                    item {
+                        ConfirmRow(
+                            stringResource(R.string.system_usage_fee),
+                            formatHuf((state.unitPrice?.trxFee ?: 0.0) * state.selectedCounties.size)
+                        )
+                    }
                 }
-                ConfirmRow(stringResource(R.string.system_usage_fee), formatHuf((state.unitPrice?.trxFee ?: 0.0) * state.selectedCounties.size))
 
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
@@ -91,9 +99,7 @@ fun CountyConfirmScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
                     shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
+                    modifier = Modifier.fillMaxWidth().height(56.dp)
                 ) {
                     if (state.isSubmitting) {
                         CircularProgressIndicator(modifier = Modifier.height(20.dp), color = Color.White)
@@ -109,9 +115,7 @@ fun CountyConfirmScreen(
                     border = BorderStroke(1.dp, BrandNavy),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandNavy),
                     shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
+                    modifier = Modifier.fillMaxWidth().height(56.dp)
                 ) {
                     Text(stringResource(R.string.general_cancel), fontWeight = FontWeight.Bold)
                 }
