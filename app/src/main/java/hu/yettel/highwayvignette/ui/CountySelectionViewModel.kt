@@ -32,16 +32,15 @@ class CountySelectionViewModel @Inject constructor(
 
     fun toggleCounty(countyId: String) {
         _uiState.update { state ->
-            val current = state.selectedIds
-            if (current.contains(countyId)) {
-                state.copy(selectedIds = current - countyId, showAdjacencyWarning = false)
+            val newSelection = if (countyId in state.selectedIds) {
+                state.selectedIds - countyId
             } else {
-                val connected = CountyAdjacency.isDirectlyConnected(countyId, current)
-                state.copy(
-                    selectedIds = current + countyId,
-                    showAdjacencyWarning = !connected
-                )
+                state.selectedIds + countyId
             }
+            state.copy(
+                selectedIds = newSelection,
+                showAdjacencyWarning = !CountyAdjacency.isConnectedRegion(newSelection)
+            )
         }
     }
 }

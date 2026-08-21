@@ -30,4 +30,25 @@ object CountyAdjacency {
         if (alreadySelected.isEmpty() || alreadySelected.contains(candidate)) return true
         return alreadySelected.any { areNeighbors(candidate, it) }
     }
+
+    fun isConnectedRegion(selection: Set<String>): Boolean {
+        if (selection.size <= 1) return true
+
+        val visited = mutableSetOf<String>()
+        val toVisit = ArrayDeque<String>()
+        toVisit.add(selection.first())
+
+        while (toVisit.isNotEmpty()) {
+            val current = toVisit.removeFirst()
+            if (!visited.add(current)) continue
+            val neighbors = adjacency[current].orEmpty()
+            for (neighbor in neighbors) {
+                if (neighbor in selection && neighbor !in visited) {
+                    toVisit.add(neighbor)
+                }
+            }
+        }
+
+        return visited.size == selection.size
+    }
 }
