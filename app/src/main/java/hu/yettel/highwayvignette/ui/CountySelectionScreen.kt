@@ -33,10 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.yettel.highwayvignette.R
 import hu.yettel.highwayvignette.ui.common.HighwayVignetteTopBar
+import hu.yettel.highwayvignette.ui.common.formatHuf
 import hu.yettel.highwayvignette.ui.county.CountyShape
 import hu.yettel.highwayvignette.ui.county.HungaryCountyMap
 import hu.yettel.highwayvignette.ui.county.HungaryCountyShapes
@@ -66,7 +69,7 @@ fun CountySelectionScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text("Éves vármegyei matricák", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.annual_county_vignettes), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(16.dp))
 
             if (state.isLoading || shapes.isEmpty()) {
@@ -85,9 +88,13 @@ fun CountySelectionScreen(
                     )
                 }
 
-                state.warning?.let {
+                if (state.showAdjacencyWarning) {
                     Spacer(Modifier.height(8.dp))
-                    Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        stringResource(R.string.county_selection_warning),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -122,7 +129,7 @@ fun CountySelectionScreen(
 
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
                 Spacer(Modifier.height(16.dp))
-                Text("Fizetendő összeg", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.amount_to_be_paid), style = MaterialTheme.typography.bodyMedium)
                 Text(formatHuf(state.total), style = MaterialTheme.typography.headlineSmall)
 
                 Spacer(Modifier.height(16.dp))
@@ -132,9 +139,11 @@ fun CountySelectionScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
                     shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
                 ) {
-                    Text("Tovább", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.general_next), fontWeight = FontWeight.Bold)
                 }
             }
         }

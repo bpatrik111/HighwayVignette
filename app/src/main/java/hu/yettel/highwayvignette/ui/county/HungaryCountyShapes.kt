@@ -9,7 +9,8 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 
 const val HUNGARY_MAP_WIDTH = 1209.727f
-const val HUNGARY_MAP_HEIGHT = 746.20312f
+const val HUNGARY_MAP_HEIGHT = 746.2031f
+const val HUNGARY_COUNTIES_SVG = "hungary_counties.svg"
 
 data class CountyShape(
     val svgId: String,
@@ -22,7 +23,7 @@ object HungaryCountyShapes {
     suspend fun load(context: Context): List<CountyShape> = withContext(Dispatchers.IO) {
         val shapes = mutableListOf<CountyShape>()
 
-        context.assets.open("hungary_counties.svg").use { input ->
+        context.assets.open(HUNGARY_COUNTIES_SVG).use { input ->
             val factory = XmlPullParserFactory.newInstance()
             val parser = factory.newPullParser()
             parser.setInput(input, "UTF-8")

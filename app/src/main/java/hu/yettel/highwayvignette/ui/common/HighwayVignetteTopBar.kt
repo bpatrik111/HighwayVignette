@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.yettel.highwayvignette.R
 import hu.yettel.highwayvignette.ui.theme.BrandLime
 import hu.yettel.highwayvignette.ui.theme.BrandNavy
 
@@ -36,11 +38,11 @@ fun HighwayVignetteTopBar(onBack: (() -> Unit)? = null) {
     ) {
         if (onBack != null) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Vissza", tint = BrandNavy)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.general_back), tint = BrandNavy)
             }
         }
         Text(
-            "E-matrica",
+            stringResource(R.string.e_vignette),
             color = BrandNavy,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp

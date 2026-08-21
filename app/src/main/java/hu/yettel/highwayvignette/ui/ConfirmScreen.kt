@@ -22,13 +22,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.yettel.highwayvignette.R
 import hu.yettel.highwayvignette.domain.model.OrderLineItem
 import hu.yettel.highwayvignette.domain.model.VignetteOption
 import hu.yettel.highwayvignette.ui.common.ConfirmRow
 import hu.yettel.highwayvignette.ui.common.HighwayVignetteTopBar
+import hu.yettel.highwayvignette.ui.common.formatHuf
+import hu.yettel.highwayvignette.ui.common.nationalVignetteLabel
 import hu.yettel.highwayvignette.ui.theme.BrandNavy
 
 @Composable
@@ -56,21 +60,21 @@ fun ConfirmScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text("Vásárlás megerősítése", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.confirm_purchase), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Spacer(Modifier.height(16.dp))
 
-            ConfirmRow("Rendszám", plate)
-            ConfirmRow("Matrica típusa", NATIONAL_LABELS[option.id] ?: option.id)
+            ConfirmRow(stringResource(R.string.registration_number), plate)
+            ConfirmRow(stringResource(R.string.vignette_type), nationalVignetteLabel(option.id))
 
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
-            ConfirmRow("Ár", formatHuf(option.cost))
-            ConfirmRow("Rendszerhasználati díj", formatHuf(option.trxFee))
+            ConfirmRow(stringResource(R.string.price), formatHuf(option.cost))
+            ConfirmRow(stringResource(R.string.system_usage_fee), formatHuf(option.trxFee))
 
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
-            Text("Fizetendő összeg", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.amount_to_be_paid), style = MaterialTheme.typography.bodyMedium)
             Text(formatHuf(option.sum), style = MaterialTheme.typography.headlineSmall)
 
             if (state is ConfirmState.Error) {
@@ -89,12 +93,14 @@ fun ConfirmScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
                 shape = RoundedCornerShape(28.dp),
-                modifier = Modifier.fillMaxWidth().height(56.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
             ) {
                 if (state == ConfirmState.Loading) {
                     CircularProgressIndicator(modifier = Modifier.height(20.dp), color = Color.White)
                 } else {
-                    Text("Tovább", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.general_next), fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -105,9 +111,11 @@ fun ConfirmScreen(
                 border = BorderStroke(1.dp, BrandNavy),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandNavy),
                 shape = RoundedCornerShape(28.dp),
-                modifier = Modifier.fillMaxWidth().height(56.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
             ) {
-                Text("Mégsem", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.general_cancel), fontWeight = FontWeight.Bold)
             }
         }
     }

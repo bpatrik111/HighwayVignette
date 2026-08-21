@@ -39,7 +39,7 @@ class HighwayRepositoryImpl @Inject constructor(
             } else {
                 OrderResult.Failure(response.message ?: "Unknown error.")
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             OrderResult.Failure("Could not reach the server.")
         }
     }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_back">Back</string>
+    <string name="general_next">Next</string>
+    <string name="general_cancel">Cancel</string>
+    <string name="general_done">Done</string>
+    <string name="e_vignette">E-vignette</string>
+    <string name="confirm_purchase">Confirm purchase</string>
+    <string name="registration_number">License plate</string>
+    <string name="vignette_type">Vignette type</string>
+    <string name="price">Price</string>
+    <string name="system_usage_fee">System usage fee</string>
+    <string name="amount_to_be_paid">Amount to be paid</string>
+    <string name="annual_counties">Annual county</string>
+    <string name="annual_county_vignettes">Annual county vignettes</string>
+    <string name="county_selection_warning">This county is not directly adjacent to your current selection.</string>
+    <string name="buying">Purchase</string>
+    <string name="national_vignette">National vignettes</string>
+    <string name="vignette_day">D1 - daily (1 day)</string>
+    <string name="vignette_week">D1 - weekly (10 days)</string>
+    <string name="vignette_month">D1 - monthly</string>
+    <string name="vignette_year">D1 - yearly</string>
+    <plurals name="success_message">
+        <item quantity="one">Your vignette\nwas purchased\nsuccessfully!</item>
+        <item quantity="other">Your vignettes\nwere purchased\nsuccessfully!</item>
+    </plurals>
+</resources>

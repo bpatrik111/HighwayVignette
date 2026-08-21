@@ -6,12 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.yettel.highwayvignette.data.repository.HighwayRepository
 import hu.yettel.highwayvignette.domain.model.Vehicle
 import hu.yettel.highwayvignette.domain.model.VignetteOption
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
                         selectedOptionId = options.firstOrNull()?.id
                     )
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = "Failed to load data.") }
             }
         }

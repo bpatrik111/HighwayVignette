@@ -30,25 +30,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.yettel.highwayvignette.R
 import hu.yettel.highwayvignette.domain.model.VignetteOption
 import hu.yettel.highwayvignette.ui.common.HighwayVignetteTopBar
+import hu.yettel.highwayvignette.ui.common.formatHuf
+import hu.yettel.highwayvignette.ui.common.nationalVignetteLabel
 import hu.yettel.highwayvignette.ui.theme.BorderGray
 import hu.yettel.highwayvignette.ui.theme.BrandNavy
-import java.text.NumberFormat
-import java.util.Locale
-
-private val hunNumberFormat = NumberFormat.getNumberInstance(Locale("hu", "HU"))
-fun formatHuf(amount: Double): String = "${hunNumberFormat.format(amount.toLong())} Ft"
-
-val NATIONAL_LABELS = mapOf(
-    "DAY" to "D1 - napi (1 napos)",
-    "WEEK" to "D1 - heti (10 napos)",
-    "MONTH" to "D1 - havi",
-    "YEAR" to "D1 - éves"
-)
 
 @Composable
 fun HomeScreen(
@@ -74,7 +66,9 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
-                            Modifier.fillMaxWidth().padding(16.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             VehicleTypeIcon(type = state.vehicle!!.vehicleType, modifier = Modifier.padding(end = 12.dp))
@@ -93,7 +87,7 @@ fun HomeScreen(
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Text(
-                            text = "Országos matricák",
+                            text = stringResource(R.string.national_vignette),
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(8.dp)
                         )
@@ -121,7 +115,7 @@ fun HomeScreen(
                                             onClick = { viewModel.selectOption(option.id) },
                                             colors = RadioButtonDefaults.colors(selectedColor = BrandNavy)
                                         )
-                                        Text(NATIONAL_LABELS[option.id] ?: option.id)
+                                        Text(nationalVignetteLabel(option.id))
                                     }
                                     Text(formatHuf(option.sum), style = MaterialTheme.typography.titleMedium)
                                 }
@@ -141,22 +135,28 @@ fun HomeScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
                         shape = RoundedCornerShape(28.dp),
-                        modifier = Modifier.fillMaxWidth().height(56.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
                     ) {
-                        Text("Vásárlás", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.buying), fontWeight = FontWeight.Bold)
                     }
 
                     Spacer(Modifier.height(16.dp))
                     Card(
-                        modifier = Modifier.fillMaxWidth().clickable { onCountySelectionClick() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onCountySelectionClick() },
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Row(
-                            Modifier.fillMaxWidth().padding(16.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Éves vármegyei matricák", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.annual_county_vignettes), style = MaterialTheme.typography.titleMedium)
                             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
                         }
                     }

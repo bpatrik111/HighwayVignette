@@ -22,6 +22,8 @@ import hu.yettel.highwayvignette.domain.model.CountyAdjacency
 import hu.yettel.highwayvignette.ui.theme.BrandLime
 import hu.yettel.highwayvignette.ui.theme.NonSelected
 
+private const val NON_SELECTABLE_ID = "BUDAPEST"
+
 @Composable
 fun HungaryCountyMapAdjacencyDebug(
     shapes: List<CountyShape>,
@@ -40,7 +42,7 @@ fun HungaryCountyMapAdjacencyDebug(
                     val originalY = (offset.y / scaleFactor).toInt()
 
                     val tapped = shapes
-                        .filter { it.svgId != "BUDAPEST" }
+                        .filter { it.svgId != NON_SELECTABLE_ID }
                         .firstOrNull { it.debugContainsPoint(originalX, originalY) }
                     tapped?.let { selected = it.svgId }
                 }

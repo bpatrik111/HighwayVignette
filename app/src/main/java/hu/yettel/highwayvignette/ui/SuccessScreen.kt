@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,12 +30,6 @@ import hu.yettel.highwayvignette.ui.theme.BrandNavy
 
 @Composable
 fun SuccessScreen(itemCount: Int, onDone: () -> Unit) {
-    val message = if (itemCount <= 1) {
-        "A matricát\nsikeresen\nkifizetted!"
-    } else {
-        "A matricákat\nsikeresen\nkifizetted!"
-    }
-
     Box(
         Modifier
             .fillMaxSize()
@@ -50,7 +46,7 @@ fun SuccessScreen(itemCount: Int, onDone: () -> Unit) {
             Spacer(Modifier.weight(1f))
 
             Text(
-                message,
+                pluralStringResource(R.plurals.success_message, itemCount),
                 color = BrandNavy,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
@@ -80,9 +76,8 @@ fun SuccessScreen(itemCount: Int, onDone: () -> Unit) {
                 shape = RoundedCornerShape(28.dp),
                 modifier = Modifier.fillMaxWidth().height(56.dp)
             ) {
-                Text("Rendben", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.general_done), fontWeight = FontWeight.Bold)
             }
-
             Spacer(Modifier.height(30.dp))
         }
     }

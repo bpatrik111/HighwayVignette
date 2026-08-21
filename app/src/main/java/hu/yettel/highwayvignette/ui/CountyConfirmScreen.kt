@@ -22,11 +22,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.yettel.highwayvignette.R
 import hu.yettel.highwayvignette.ui.common.ConfirmRow
 import hu.yettel.highwayvignette.ui.common.HighwayVignetteTopBar
+import hu.yettel.highwayvignette.ui.common.formatHuf
 import hu.yettel.highwayvignette.ui.theme.BrandNavy
 
 @Composable
@@ -52,26 +55,28 @@ fun CountyConfirmScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text("Vásárlás megerősítése", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.confirm_purchase), style = MaterialTheme.typography.titleLarge)
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Spacer(Modifier.height(16.dp))
 
             if (state.isLoading) {
                 CircularProgressIndicator()
             } else {
-                ConfirmRow("Rendszám", state.plate)
-                ConfirmRow("Matrica típusa", "Éves vármegyei")
+                ConfirmRow(stringResource(R.string.registration_number), state.plate)
+                ConfirmRow(stringResource(R.string.vignette_type),
+                    stringResource(R.string.annual_counties)
+                )
 
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
                 state.selectedCounties.forEach { county ->
                     ConfirmRow(county.name, formatHuf(state.unitPrice?.cost ?: 0.0))
                 }
-                ConfirmRow("Rendszerhasználati díj", formatHuf((state.unitPrice?.trxFee ?: 0.0) * state.selectedCounties.size))
+                ConfirmRow(stringResource(R.string.system_usage_fee), formatHuf((state.unitPrice?.trxFee ?: 0.0) * state.selectedCounties.size))
 
                 HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
-                Text("Fizetendő összeg", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.amount_to_be_paid), style = MaterialTheme.typography.bodyMedium)
                 Text(formatHuf(state.total), style = MaterialTheme.typography.headlineSmall)
 
                 state.error?.let {
@@ -86,12 +91,14 @@ fun CountyConfirmScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
                     shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
                 ) {
                     if (state.isSubmitting) {
                         CircularProgressIndicator(modifier = Modifier.height(20.dp), color = Color.White)
                     } else {
-                        Text("Tovább", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.general_next), fontWeight = FontWeight.Bold)
                     }
                 }
 
@@ -102,9 +109,11 @@ fun CountyConfirmScreen(
                     border = BorderStroke(1.dp, BrandNavy),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandNavy),
                     shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
                 ) {
-                    Text("Mégsem", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.general_cancel), fontWeight = FontWeight.Bold)
                 }
             }
         }

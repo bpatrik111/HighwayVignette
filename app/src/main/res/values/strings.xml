@@ -1,3 +1,28 @@
 <resources>
-    <string name="app_name">HighwayVignette</string>
+    <string name="app_name" translatable="false">HighwayVignette</string>
+
+    <string name="general_back">Vissza</string>
+    <string name="general_next">Tovább</string>
+    <string name="general_cancel">Mégsem</string>
+    <string name="general_done">Rendben</string>
+    <string name="e_vignette">E-matrica</string>
+    <string name="confirm_purchase">Vásárlás megerősítése</string>
+    <string name="registration_number">Rendszám</string>
+    <string name="vignette_type">Matrica típusa</string>
+    <string name="price">Ár</string>
+    <string name="system_usage_fee">Rendszerhasználati díj</string>
+    <string name="amount_to_be_paid">Fizetendő összeg</string>
+    <string name="annual_counties">Éves vármegyei</string>
+    <string name="annual_county_vignettes">Éves vármegyei matricák</string>
+    <string name="county_selection_warning">Ez a vármegye nem határos közvetlenül a jelenlegi kiválasztással.</string>
+    <string name="buying">Vásárlás</string>
+    <string name="national_vignette">Országos matricák</string>
+    <string name="vignette_day">D1 - napi (1 napos)</string>
+    <string name="vignette_week">D1 - heti (10 napos)</string>
+    <string name="vignette_month">D1 - havi</string>
+    <string name="vignette_year">D1 - éves</string>
+    <plurals name="success_message">
+        <item quantity="one">A matricát\nsikeresen\nkifizetted!</item>
+        <item quantity="other">A matricákat\nsikeresen\nkifizetted!</item>
+    </plurals>
 </resources>

@@ -2,10 +2,14 @@ package hu.yettel.highwayvignette.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val BrandLime = Color(0xFFC6F135)
+val BrandNavy = Color(0xFF0B1F3A)
+val SurfaceGray = Color(0xFFF4F4F6)
+val BorderGray = Color(0xFFE0E0E0)
+val NonSelected = Color(0xFFE7ECF3)
+val Error = Color(0xFFD32F2F)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+var Particle_1 = Color(0xFF0B1F3A)
+var Particle_2 = Color.White
+var Particle_3 = Color(0xFFE53935)
+var Particle_4 = Color(0xFF1E88E5)

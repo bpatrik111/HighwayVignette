@@ -18,6 +18,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.dp
+import hu.yettel.highwayvignette.ui.theme.Particle_1
+import hu.yettel.highwayvignette.ui.theme.Particle_2
+import hu.yettel.highwayvignette.ui.theme.Particle_3
+import hu.yettel.highwayvignette.ui.theme.Particle_4
 import kotlin.random.Random
 
 private data class ConfettiPiece(
@@ -31,10 +35,10 @@ private data class ConfettiPiece(
 )
 
 private val ConfettiColors = listOf(
-    Color(0xFF0B1F3A),
-    Color.White,
-    Color(0xFFE53935),
-    Color(0xFF1E88E5)
+    Particle_1,
+    Particle_2,
+    Particle_3,
+    Particle_4
 )
 
 private val FadeZoneHeight = 60.dp

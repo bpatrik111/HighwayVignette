@@ -34,16 +34,12 @@ class CountySelectionViewModel @Inject constructor(
         _uiState.update { state ->
             val current = state.selectedIds
             if (current.contains(countyId)) {
-                state.copy(selectedIds = current - countyId, warning = null)
+                state.copy(selectedIds = current - countyId, showAdjacencyWarning = false)
             } else {
                 val connected = CountyAdjacency.isDirectlyConnected(countyId, current)
                 state.copy(
                     selectedIds = current + countyId,
-                    warning = if (!connected) {
-                        "Ez a vármegye nem határos közvetlenül a jelenlegi kiválasztással."
-                    } else {
-                        null
-                    }
+                    showAdjacencyWarning = !connected
                 )
             }
         }
@@ -54,7 +50,7 @@ data class CountySelectionUiState(
     val isLoading: Boolean = true,
     val counties: List<County> = emptyList(),
     val selectedIds: Set<String> = emptySet(),
-    val warning: String? = null,
+    val showAdjacencyWarning: Boolean = false,
     val unitPrice: VignetteOption? = null
 ) {
     val total: Double
