@@ -8,6 +8,7 @@ import hu.yettel.highwayvignette.data.repository.HighwayRepository
 import hu.yettel.highwayvignette.domain.model.County
 import hu.yettel.highwayvignette.domain.model.OrderLineItem
 import hu.yettel.highwayvignette.domain.model.OrderResult
+import hu.yettel.highwayvignette.domain.model.VignetteOption
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,12 +30,14 @@ class CountyConfirmViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val vehicle = repository.getVehicle()
             val allCounties = repository.getCounties()
             val price = repository.getCountyVignettePrice()
             val selectedCounties = allCounties.filter { it.id in selectedIds }
             _state.update {
                 it.copy(
                     isLoading = false,
+                    plate = vehicle.plate,
                     selectedCounties = selectedCounties,
                     unitPrice = price,
                     total = price.sum * selectedCounties.size
@@ -60,8 +63,9 @@ class CountyConfirmViewModel @Inject constructor(
 
 data class CountyConfirmUiState(
     val isLoading: Boolean = true,
+    val plate: String = "",
     val selectedCounties: List<County> = emptyList(),
-    val unitPrice: hu.yettel.highwayvignette.domain.model.VignetteOption? = null,
+    val unitPrice: VignetteOption? = null,
     val total: Double = 0.0,
     val isSubmitting: Boolean = false,
     val isSuccess: Boolean = false,

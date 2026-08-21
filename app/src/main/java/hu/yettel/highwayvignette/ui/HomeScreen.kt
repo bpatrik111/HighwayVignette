@@ -43,7 +43,7 @@ import java.util.Locale
 private val hunNumberFormat = NumberFormat.getNumberInstance(Locale("hu", "HU"))
 fun formatHuf(amount: Double): String = "${hunNumberFormat.format(amount.toLong())} Ft"
 
-private val NATIONAL_LABELS = mapOf(
+val NATIONAL_LABELS = mapOf(
     "DAY" to "D1 - napi (1 napos)",
     "WEEK" to "D1 - heti (10 napos)",
     "MONTH" to "D1 - havi",
@@ -53,7 +53,7 @@ private val NATIONAL_LABELS = mapOf(
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onPurchaseClick: (VignetteOption) -> Unit,
+    onPurchaseClick: (plate: String, option: VignetteOption) -> Unit,
     onCountySelectionClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -95,8 +95,7 @@ fun HomeScreen(
                         Text(
                             text = "Országos matricák",
                             style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier
-                                .padding(8.dp)
+                            modifier = Modifier.padding(8.dp)
                         )
                         Spacer(Modifier.height(8.dp))
                         Column(Modifier.padding(8.dp)) {
@@ -133,7 +132,11 @@ fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     val selectedOption = state.nationalOptions.firstOrNull { it.id == state.selectedOptionId }
                     Button(
-                        onClick = { selectedOption?.let(onPurchaseClick) },
+                        onClick = {
+                            selectedOption?.let { option ->
+                                onPurchaseClick(state.vehicle!!.plate, option)
+                            }
+                        },
                         enabled = selectedOption != null,
                         colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),

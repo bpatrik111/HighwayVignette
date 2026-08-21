@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.Color
 val BrandLime = Color(0xFFC6F135)
 val BrandNavy = Color(0xFF0B1F3A)
 val SurfaceGray = Color(0xFFF4F4F6)
-
 val BorderGray = Color(0xFFE0E0E0)
+val NonSelected = Color(0xFFE7ECF3)
 
 private val AppColorScheme = lightColorScheme(
     primary = BrandLime,

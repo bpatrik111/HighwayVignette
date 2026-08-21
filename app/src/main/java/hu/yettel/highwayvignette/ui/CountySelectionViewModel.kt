@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.yettel.highwayvignette.data.repository.HighwayRepository
 import hu.yettel.highwayvignette.domain.model.County
 import hu.yettel.highwayvignette.domain.model.CountyAdjacency
+import hu.yettel.highwayvignette.domain.model.VignetteOption
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,8 @@ class CountySelectionViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val counties = repository.getCounties()
-            _uiState.update { it.copy(isLoading = false, counties = counties) }
+            val price = repository.getCountyVignettePrice()
+            _uiState.update { it.copy(isLoading = false, counties = counties, unitPrice = price) }
         }
     }
 
@@ -37,7 +39,11 @@ class CountySelectionViewModel @Inject constructor(
                 val connected = CountyAdjacency.isDirectlyConnected(countyId, current)
                 state.copy(
                     selectedIds = current + countyId,
-                    warning = if (!connected) "This county is not directly adjacent to your current selection." else null
+                    warning = if (!connected) {
+                        "Ez a vármegye nem határos közvetlenül a jelenlegi kiválasztással."
+                    } else {
+                        null
+                    }
                 )
             }
         }
@@ -48,5 +54,9 @@ data class CountySelectionUiState(
     val isLoading: Boolean = true,
     val counties: List<County> = emptyList(),
     val selectedIds: Set<String> = emptySet(),
-    val warning: String? = null
-)
+    val warning: String? = null,
+    val unitPrice: VignetteOption? = null
+) {
+    val total: Double
+        get() = (unitPrice?.sum ?: 0.0) * selectedIds.size
+}

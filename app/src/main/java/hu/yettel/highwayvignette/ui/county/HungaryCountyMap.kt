@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.input.pointer.pointerInput
+import hu.yettel.highwayvignette.ui.theme.BrandLime
+import hu.yettel.highwayvignette.ui.theme.NonSelected
 
 private const val NON_SELECTABLE_ID = "BUDAPEST"
 
@@ -47,9 +49,8 @@ fun HungaryCountyMap(
             shapes.forEach { shape ->
                 val composePath = shape.path.asComposePath()
                 val fillColor = when {
-                    shape.svgId == NON_SELECTABLE_ID -> Color(0xFFBFBFBF)
-                    shape.svgId in selectedSvgIds -> Color(0xFFC6F135)
-                    else -> Color(0xFFE7ECF3)
+                    shape.svgId in selectedSvgIds -> BrandLime
+                    else -> NonSelected
                 }
                 drawPath(path = composePath, color = fillColor)
                 drawPath(

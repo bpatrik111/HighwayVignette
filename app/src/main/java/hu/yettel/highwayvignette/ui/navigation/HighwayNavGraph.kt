@@ -16,13 +16,15 @@ import hu.yettel.highwayvignette.ui.SuccessScreen
 
 object Routes {
     const val HOME = "home"
-    const val SUCCESS = "success"
-    const val CONFIRM_NATIONAL = "confirm_national/{optionId}/{cost}/{trxFee}/{sum}"
+    const val SUCCESS = "success/{itemCount}"
+    const val CONFIRM_NATIONAL = "confirm_national/{plate}/{optionId}/{cost}/{trxFee}/{sum}"
     const val COUNTY_SELECTION = "county_selection"
     const val CONFIRM_COUNTY = "confirm_county/{countyIds}"
 
-    fun confirmNational(optionId: String, cost: Double, trxFee: Double, sum: Double) =
-        "confirm_national/$optionId/$cost/$trxFee/$sum"
+    fun success(itemCount: Int) = "success/$itemCount"
+
+    fun confirmNational(plate: String, optionId: String, cost: Double, trxFee: Double, sum: Double) =
+        "confirm_national/$plate/$optionId/$cost/$trxFee/$sum"
 
     fun confirmCounty(countyIds: String) = "confirm_county/$countyIds"
 }
@@ -33,19 +35,31 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
 
         composable(Routes.HOME) {
             HomeScreen(
-                onPurchaseClick = { option -> },
+                onPurchaseClick = { plate, option ->
+                    navController.navigate(
+                        Routes.confirmNational(plate, option.id, option.cost, option.trxFee, option.sum)
+                    )
+                },
                 onCountySelectionClick = { navController.navigate(Routes.COUNTY_SELECTION) }
             )
         }
 
         composable(Routes.COUNTY_SELECTION) {
             CountySelectionScreen(
+                onBack = { navController.popBackStack() },
                 onContinue = { ids -> navController.navigate(Routes.confirmCounty(ids)) }
             )
         }
+
         composable(
             route = Routes.CONFIRM_NATIONAL,
-            arguments = listOf()
+            arguments = listOf(
+                navArgument("plate") { type = NavType.StringType },
+                navArgument("optionId") { type = NavType.StringType },
+                navArgument("cost") { type = NavType.FloatType },
+                navArgument("trxFee") { type = NavType.FloatType },
+                navArgument("sum") { type = NavType.FloatType }
+            )
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val option = VignetteOption(
@@ -55,21 +69,39 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
                 trxFee = args.getFloat("trxFee").toDouble(),
                 sum = args.getFloat("sum").toDouble()
             )
-            ConfirmScreen(option = option, onOrderSuccess = { navController.navigate(Routes.SUCCESS) })
+            ConfirmScreen(
+                plate = args.getString("plate")!!,
+                option = option,
+                onBack = { navController.popBackStack() },
+                onCancel = { navController.popBackStack() },
+                onOrderSuccess = { navController.navigate(Routes.success(1)) }
+            )
         }
 
-        composable(Routes.SUCCESS) {
+        composable(
+            route = Routes.SUCCESS,
+            arguments = listOf(navArgument("itemCount") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val itemCount = backStackEntry.arguments?.getInt("itemCount") ?: 1
             SuccessScreen(
+                itemCount = itemCount,
                 onDone = {
                     navController.popBackStack(Routes.HOME, inclusive = false)
                 }
             )
         }
+
         composable(
             route = Routes.CONFIRM_COUNTY,
             arguments = listOf(navArgument("countyIds") { type = NavType.StringType })
-        ) {
-            CountyConfirmScreen(onOrderSuccess = { navController.navigate(Routes.SUCCESS) })
+        ) { backStackEntry ->
+            val countyIds = backStackEntry.arguments?.getString("countyIds").orEmpty()
+            val itemCount = countyIds.split(",").count { it.isNotBlank() }
+            CountyConfirmScreen(
+                onBack = { navController.popBackStack() },
+                onCancel = { navController.popBackStack() },
+                onOrderSuccess = { navController.navigate(Routes.success(itemCount)) }
+            )
         }
     }
 }

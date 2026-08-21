@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import hu.yettel.highwayvignette.domain.model.CountyAdjacency
+import hu.yettel.highwayvignette.ui.theme.BrandLime
+import hu.yettel.highwayvignette.ui.theme.NonSelected
 
 @Composable
 fun HungaryCountyMapAdjacencyDebug(
@@ -51,11 +53,10 @@ fun HungaryCountyMapAdjacencyDebug(
             shapes.forEach { shape ->
                 val composePath = shape.path.asComposePath()
                 val fillColor = when {
-                    shape.svgId == "BUDAPEST" -> Color(0xFFBFBFBF)
-                    shape.svgId == selectedId -> Color(0xFF4CAF50)
-                    selectedId == null -> Color(0xFFE7ECF3)
-                    CountyAdjacency.areNeighbors(selectedId, shape.svgId) -> Color(0xFF2196F3)
-                    else -> Color(0xFFF44336)
+                    shape.svgId == selectedId -> BrandLime
+                    selectedId == null -> NonSelected
+                    CountyAdjacency.areNeighbors(selectedId, shape.svgId) -> Color.Blue
+                    else -> Color.Red
                 }
                 drawPath(path = composePath, color = fillColor)
                 drawPath(
