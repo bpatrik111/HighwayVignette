@@ -36,18 +36,18 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
         composable(Routes.HOME) {
             HomeScreen(
                 onPurchaseClick = { plate, option ->
-                    navController.navigate(
+                    navController.navigateSafe(
                         Routes.confirmNational(plate, option.id, option.cost, option.trxFee, option.sum)
                     )
                 },
-                onCountySelectionClick = { navController.navigate(Routes.COUNTY_SELECTION) }
+                onCountySelectionClick = { navController.navigateSafe(Routes.COUNTY_SELECTION) }
             )
         }
 
         composable(Routes.COUNTY_SELECTION) {
             CountySelectionScreen(
-                onBack = { navController.popBackStack() },
-                onContinue = { ids -> navController.navigate(Routes.confirmCounty(ids)) }
+                onBack = { navController.popBackStackSafe() },
+                onContinue = { ids -> navController.navigateSafe(Routes.confirmCounty(ids)) }
             )
         }
 
@@ -72,9 +72,9 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
             ConfirmScreen(
                 plate = args.getString("plate")!!,
                 option = option,
-                onBack = { navController.popBackStack() },
-                onCancel = { navController.popBackStack() },
-                onOrderSuccess = { navController.navigate(Routes.success(1)) }
+                onBack = { navController.popBackStackSafe() },
+                onCancel = { navController.popBackStackSafe() },
+                onOrderSuccess = { navController.navigateSafe(Routes.success(1)) }
             )
         }
 
@@ -86,7 +86,7 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
             SuccessScreen(
                 itemCount = itemCount,
                 onDone = {
-                    navController.popBackStack(Routes.HOME, inclusive = false)
+                    navController.popBackStackSafe(Routes.HOME, inclusive = false)
                 }
             )
         }
@@ -98,9 +98,9 @@ fun HighwayNavGraph(navController: NavHostController = rememberNavController()) 
             val countyIds = backStackEntry.arguments?.getString("countyIds").orEmpty()
             val itemCount = countyIds.split(",").count { it.isNotBlank() }
             CountyConfirmScreen(
-                onBack = { navController.popBackStack() },
-                onCancel = { navController.popBackStack() },
-                onOrderSuccess = { navController.navigate(Routes.success(itemCount)) }
+                onBack = { navController.popBackStackSafe() },
+                onCancel = { navController.popBackStackSafe() },
+                onOrderSuccess = { navController.navigateSafe(Routes.success(itemCount)) }
             )
         }
     }
