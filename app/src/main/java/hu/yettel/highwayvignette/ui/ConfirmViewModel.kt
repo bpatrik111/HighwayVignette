@@ -22,6 +22,8 @@ class ConfirmViewModel @Inject constructor(
     val state: StateFlow<ConfirmState> = _state.asStateFlow()
 
     fun confirmOrder(item: OrderLineItem) {
+        if (_state.value == ConfirmState.Loading) return
+
         _state.update { ConfirmState.Loading }
         viewModelScope.launch {
             when (val result = repository.placeOrder(listOf(item))) {

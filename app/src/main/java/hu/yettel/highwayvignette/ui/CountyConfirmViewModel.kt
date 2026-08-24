@@ -53,6 +53,8 @@ class CountyConfirmViewModel @Inject constructor(
     }
 
     fun confirmOrder() {
+        if (_state.value.isSubmitting) return
+
         val price = _state.value.unitPrice ?: return
         _state.update { it.copy(isSubmitting = true) }
         viewModelScope.launch {
