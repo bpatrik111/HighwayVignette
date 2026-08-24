@@ -20,7 +20,7 @@ object CountyAdjacency {
         "YEAR_25" to setOf("YEAR_14", "YEAR_18"), // Szabolcs-Szatmár-Bereg
         "YEAR_26" to setOf("YEAR_24", "YEAR_12", "YEAR_11", "YEAR_16"), // Tolna
         "YEAR_27" to setOf("YEAR_17", "YEAR_28", "YEAR_24", "YEAR_29"), // Vas
-        "YEAR_28" to setOf("YEAR_17", "YEAR_27", "YEAR_24", "YEAR_26", "YEAR_16", "YEAR_21", "YEAR_29"), // Veszprém
+        "YEAR_28" to setOf("YEAR_17", "YEAR_27", "YEAR_24", "YEAR_16", "YEAR_21", "YEAR_29"), // Veszprém
         "YEAR_29" to setOf("YEAR_27", "YEAR_28", "YEAR_24") // Zala
     )
 
