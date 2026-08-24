@@ -30,18 +30,24 @@ class CountyConfirmViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val vehicle = repository.getVehicle()
-            val allCounties = repository.getCounties()
-            val price = repository.getCountyVignettePrice()
-            val selectedCounties = allCounties.filter { it.id in selectedIds }
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    plate = vehicle.plate,
-                    selectedCounties = selectedCounties,
-                    unitPrice = price,
-                    total = price.sum * selectedCounties.size
-                )
+            try {
+                val vehicle = repository.getVehicle()
+                val allCounties = repository.getCounties()
+                val price = repository.getCountyVignettePrice()
+                val selectedCounties = allCounties.filter { it.id in selectedIds }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        plate = vehicle.plate,
+                        selectedCounties = selectedCounties,
+                        unitPrice = price,
+                        total = price.sum * selectedCounties.size
+                    )
+                }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _state.update { it.copy(isLoading = false, error = "Failed to load data.") }
             }
         }
     }

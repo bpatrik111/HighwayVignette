@@ -39,6 +39,8 @@ class HighwayRepositoryImpl @Inject constructor(
             } else {
                 OrderResult.Failure(response.message ?: "Unknown error.")
             }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (_: Exception) {
             OrderResult.Failure("Could not reach the server.")
         }

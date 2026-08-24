@@ -72,78 +72,84 @@ fun CountySelectionScreen(
             Text(stringResource(R.string.annual_county_vignettes), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(16.dp))
 
-            if (state.isLoading || shapes.isEmpty()) {
-                CircularProgressIndicator()
-            } else {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    HungaryCountyMap(
-                        shapes = shapes,
-                        selectedSvgIds = state.selectedIds,
-                        onToggle = { countyId -> viewModel.toggleCounty(countyId) },
-                        modifier = Modifier.padding(8.dp)
-                    )
+            when {
+                state.error != null -> {
+                    Text(state.error ?: "", color = MaterialTheme.colorScheme.error)
                 }
-
-                if (state.showAdjacencyWarning) {
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        stringResource(R.string.county_selection_warning),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                state.isLoading || shapes.isEmpty() -> {
+                    CircularProgressIndicator()
                 }
+                else -> {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        HungaryCountyMap(
+                            shapes = shapes,
+                            selectedSvgIds = state.selectedIds,
+                            onToggle = { countyId -> viewModel.toggleCounty(countyId) },
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
 
-                Spacer(Modifier.height(16.dp))
+                    if (state.showAdjacencyWarning) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            stringResource(R.string.county_selection_warning),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
 
-                LazyColumn(Modifier.weight(1f)) {
-                    items(state.counties, key = { it.id }) { county ->
-                        val isSelected = county.id in state.selectedIds
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Checkbox(
-                                    checked = isSelected,
-                                    onCheckedChange = { viewModel.toggleCounty(county.id) },
-                                    colors = CheckboxDefaults.colors(
-                                        checkedColor = BrandNavy,
-                                        checkmarkColor = Color.White
+                    Spacer(Modifier.height(16.dp))
+
+                    LazyColumn(Modifier.weight(1f)) {
+                        items(state.counties, key = { it.id }) { county ->
+                            val isSelected = county.id in state.selectedIds
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Checkbox(
+                                        checked = isSelected,
+                                        onCheckedChange = { viewModel.toggleCounty(county.id) },
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = BrandNavy,
+                                            checkmarkColor = Color.White
+                                        )
                                     )
-                                )
-                                Text(county.name)
-                            }
-                            state.unitPrice?.let { price ->
-                                Text(formatHuf(price.sum), style = MaterialTheme.typography.bodyLarge)
+                                    Text(county.name)
+                                }
+                                state.unitPrice?.let { price ->
+                                    Text(formatHuf(price.sum), style = MaterialTheme.typography.bodyLarge)
+                                }
                             }
                         }
                     }
-                }
 
-                HorizontalDivider(Modifier.padding(vertical = 12.dp))
-                Spacer(Modifier.height(16.dp))
-                Text(stringResource(R.string.amount_to_be_paid), style = MaterialTheme.typography.bodyMedium)
-                Text(formatHuf(state.total), style = MaterialTheme.typography.headlineSmall)
+                    HorizontalDivider(Modifier.padding(vertical = 12.dp))
+                    Spacer(Modifier.height(16.dp))
+                    Text(stringResource(R.string.amount_to_be_paid), style = MaterialTheme.typography.bodyMedium)
+                    Text(formatHuf(state.total), style = MaterialTheme.typography.headlineSmall)
 
-                Spacer(Modifier.height(16.dp))
-                Button(
-                    onClick = { onContinue(state.selectedIds.joinToString(",")) },
-                    enabled = state.selectedIds.isNotEmpty(),
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
-                    shape = RoundedCornerShape(28.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text(stringResource(R.string.general_next), fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.height(16.dp))
+                    Button(
+                        onClick = { onContinue(state.selectedIds.joinToString(",")) },
+                        enabled = state.selectedIds.isNotEmpty(),
+                        colors = ButtonDefaults.buttonColors(containerColor = BrandNavy, contentColor = Color.White),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
+                        shape = RoundedCornerShape(28.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(stringResource(R.string.general_next), fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }

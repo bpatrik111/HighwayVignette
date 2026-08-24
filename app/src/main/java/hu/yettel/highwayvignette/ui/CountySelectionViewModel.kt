@@ -24,9 +24,15 @@ class CountySelectionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val counties = repository.getCounties()
-            val price = repository.getCountyVignettePrice()
-            _uiState.update { it.copy(isLoading = false, counties = counties, unitPrice = price) }
+            try {
+                val counties = repository.getCounties()
+                val price = repository.getCountyVignettePrice()
+                _uiState.update { it.copy(isLoading = false, counties = counties, unitPrice = price) }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(isLoading = false, error = "Failed to load data.") }
+            }
         }
     }
 
@@ -50,7 +56,8 @@ data class CountySelectionUiState(
     val counties: List<County> = emptyList(),
     val selectedIds: Set<String> = emptySet(),
     val showAdjacencyWarning: Boolean = false,
-    val unitPrice: VignetteOption? = null
+    val unitPrice: VignetteOption? = null,
+    val error: String? = null
 ) {
     val total: Double
         get() = (unitPrice?.sum ?: 0.0) * selectedIds.size

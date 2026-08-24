@@ -34,6 +34,8 @@ class HomeViewModel @Inject constructor(
                         selectedOptionId = options.firstOrNull()?.id
                     )
                 }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (_: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = "Failed to load data.") }
             }
